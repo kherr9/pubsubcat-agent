@@ -2,9 +2,6 @@ from azure.servicebus import ServiceBusService, Message, Topic, Subscription, Qu
 from azure import WindowsAzureMissingResourceError
 from azure.storage import BlobService
 import json
-#import pyttsx
-# windows specific
-##import winsound
 import pygame
 import urllib
 import threading
@@ -12,7 +9,6 @@ import os, sys, traceback, subprocess
 import time, datetime
 import socket
 from urlparse import urlparse
-
 
 print 'Starting mLevel PubSubCat'
 
