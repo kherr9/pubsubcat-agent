@@ -168,6 +168,7 @@ def process_messages():
 			if msg.body is not None:
 				print (msg.body)
 				message_type = msg.custom_properties['messagetype']
+				publish_log("Got message type: " + message_type + ", Body: " + msg.body)
 				print 'got message type: ' + message_type
 				dict = json.loads(msg.body)
 				print (dict)
