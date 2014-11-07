@@ -131,9 +131,9 @@ def init():
 	print "Calling init"
 	
 	print "Ensuring temp directory"
-	if not os.path.exists(tempFolder):
+	if not os.path.exists("temp"):
 		print "Creating temp directory"
-		os.makedirs(tempFolder)
+		os.makedirs("temp")
 		
 	print "Completed init"
 
