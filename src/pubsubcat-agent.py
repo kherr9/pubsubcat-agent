@@ -173,23 +173,26 @@ def process_messages():
 				print (dict)
 				if message_type in callbacks:
 					callbacks[message_type](dict)
+					publish_log("Completed task: " + message_type)
 				else:
 					print 'Unknown message type: ' + message_type
-					
-				publish_log("Completed a message")
+					publish_log("Unknown task: " + message_type)
 			else:
 				print 'No message was delivered'
 		except WindowsAzureMissingResourceError:
 			print 'The subscription we are listening to no longer exists'
+			publish_log('The subscription we are listening to no longer exists')
 			sbs = None
 		except KeyboardInterrupt:
 			print 'Called to quit'
+			publish_log("Called to quit")
 			signaled_to_quit = True
 		except:
 			exc_type, exc_value, exc_traceback = sys.exc_info()
 			print "*** print_exception:"
 			traceback.print_exception(exc_type, exc_value, exc_traceback,
 									  limit=2, file=sys.stdout)
+			publish_log("An unhandle error!!!")
 
 process_messages()
 	
