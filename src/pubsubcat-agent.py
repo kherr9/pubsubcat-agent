@@ -62,8 +62,8 @@ def publish_log(message):
 		"level": "debug",
 		"message": message
 	}
-	json = json.dumps(body)
-	msg = Message(json.encode('utf-8'), custom_properties={"messagetype":"MLevel.PubSubCat.Messages.Agent.AgentLog"})
+	js = json.dumps(body)
+	msg = Message(js.encode('utf-8'), custom_properties={"messagetype":"MLevel.PubSubCat.Messages.Agent.AgentLog"})
 	sbs.send_topic_message("t.mlevel.pubsubcat.messages.agent.agentlog", msg)
 	
 
