@@ -39,7 +39,6 @@ def create_service_bus_service():
 						shared_access_key_name=shared_access_key_name,
 						shared_access_key_value=shared_access_key_value)
 						
-
 	# create subscription for THIS machine queue
 	subscription = Subscription()
 	subscription.default_message_time_to_live = 'PT1M'	#1m
@@ -136,9 +135,9 @@ callbacks = {
 def process_messages():
 	# now start listening to subscription
 	print 'Now listening to incoming messages...'
-	signaledToQuit = False;
+	signaled_to_quit = False;
 	sbs = None
-	while not signaledToQuit:
+	while not signaled_to_quit:
 		try:
 			if sbs is None:
 				print "Service bus service has does not exist, creating..."
@@ -163,7 +162,7 @@ def process_messages():
 			sbs = None
 		except KeyboardInterrupt:
 			print 'Called to quit'
-			signaledToQuit = True
+			signaled_to_quit = True
 		except:
 			exc_type, exc_value, exc_traceback = sys.exc_info()
 			print "*** print_exception:"
