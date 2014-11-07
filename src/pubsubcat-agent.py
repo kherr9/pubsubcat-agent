@@ -63,6 +63,7 @@ def handle_speak_text(dict):
 	speak_text(msg);
 
 def handle_take_photo(dict):
+	print 'handling take photo'
 	speak_text("HR Warning!!! I am taking a picture of you ...1 2 3...Go")
 	ts = time.time()
 	st = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d-%H-%M-%S')
