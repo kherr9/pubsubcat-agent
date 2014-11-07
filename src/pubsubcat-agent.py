@@ -165,6 +165,9 @@ def process_messages():
 		except WindowsAzureMissingResourceError:
 			print 'The subscription we are listening to no longer exists'
 			sbs = None
+		except KeyboardInterrupt:
+			print 'Called to quit'
+			signaledToQuit = True
 		except:
 			exc_type, exc_value, exc_traceback = sys.exc_info()
 			print "*** print_exception:"
