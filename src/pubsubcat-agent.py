@@ -79,7 +79,7 @@ def handle_speak_text(dict):
 	print 'Speak "' + msg + '"'
 	msg = msg.replace("\"", "")
 	os.system("/usr/bin/espeak -a 200 -s 150 -w temp/speakfile.wav \"" + msg + "\"")
-	play_audio("temp/speakfile.wav")
+	play_audio("temp/speakfile.wav"
 	#engine = pyttsx.init()
 	# slow down the speech rate (speed)
 	#rate = engine.getProperty('rate')
@@ -108,21 +108,16 @@ def download_file(url):
 	return path
 
 def handle_take_photo(dict):
-        speak_dict = {'text':'HR Warning!!! I am taking a picture of you ...1 2 3...Go'}
-        handle_speak_text(speak_dict)
-	# ensure temp directory
-	tempFolder = "temp"
-	if not os.path.exists(tempFolder):
-		os.makedirs(tempFolder)
-        ts = time.time()
+	speak_dict = {'text':'HR Warning!!! I am taking a picture of you ...1 2 3...Go'}
+	handle_speak_text(speak_dict)
+	ts = time.time()
 	st = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d-%H-%M-%S')
-        filename = "CatPIC-" + st + ".jpg"
+	filename = "CatPIC-" + st + ".jpg"
 	os.system("/usr/bin/fswebcam -r 1600x900 --no-banner temp/" + filename)
 	uploadToBlob(filename)
 	os.remove("temp/" + filename)
-        speak_dict = {'text':'Meow, Nice Pic...'}
-        handle_speak_text(speak_dict)
-
+	speak_dict = {'text':'Meow, Nice Pic...'}
+	handle_speak_text(speak_dict)
 
 def uploadToBlob(filename):
 	#uploads to azure blob storage
@@ -131,6 +126,19 @@ def uploadToBlob(filename):
 	blob_service.put_block_blob_from_path("pubsubcat-pics", hostname + "/" + filename, 'temp/' + filename)
 
 
+def init():
+	# Called once to init program
+	print "Calling init"
+	
+	print "Ensuring temp directory"
+	if not os.path.exists(tempFolder):
+		print "Creating temp directory"
+		os.makedirs(tempFolder)
+		
+	print "Completed init"
+
+init()		
+		
 callbacks = {
 	'MLevel.PubSubCat.Messages.Agent.PlayAudio': handle_play_audio,
 	'MLevel.PubSubCat.Messages.Agent.SpeakText': handle_speak_text,
