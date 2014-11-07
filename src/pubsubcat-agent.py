@@ -50,6 +50,56 @@ def create_service_bus_service():
 	
 	return x
 
+def handle_play_audio(dict):
+	print 'handling play audio'
+	url = dict['url'];
+	print 'Play audio: "' + url + '"'
+	path = download_file(url)
+	play_audio(path)
+	
+def handle_speak_text(dict):
+	print 'handling speak text'
+	msg = dict['text'];
+	speak_text(msg);
+
+def handle_take_photo(dict):
+	speak_text("HR Warning!!! I am taking a picture of you ...1 2 3...Go")
+	ts = time.time()
+	st = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d-%H-%M-%S')
+	filename = "CatPIC-" + st + ".jpg"
+	os.system("/usr/bin/fswebcam -r 1600x900 --no-banner temp/" + filename)
+	upload_to_blob(filename)
+	os.remove("temp/" + filename)
+	speak_text("Meow, Nice Pic...")
+	
+def download_file(url):
+	# create local file path 
+	o = urlparse(url)
+	path = "temp/a" + o.path.replace("/", "_")
+	# check if file exists
+	if os.path.isfile(path):
+		print "File already exists"
+	else:
+		# download file
+		print "Downloading file to: " + path
+		testfile = urllib.URLopener()
+		testfile.retrieve(url, path)
+	
+	return path
+
+def upload_to_blob(filename):
+	#uploads to azure blob storage
+	blob_service = BlobService(account_name=storage_account_name, account_key=storage_account_key)
+	blob_service.create_container('pubsubcat-pics')
+	blob_service.put_block_blob_from_path("pubsubcat-pics", hostname + "/" + filename, 'temp/' + filename)
+
+def speak_text(msg):
+	print 'Speak "' + msg + '"'
+	# escape the string by removing double quotes
+	msg = msg.replace("\"", "")	
+	os.system("/usr/bin/espeak -a 200 -s 150 -w temp/speakfile.wav \"" + msg + "\"")
+	play_audio("temp/speakfile.wav ")
+	
 def play_audio(path):
 	print "playing audio file " + path
 	pygame.mixer.init()
@@ -62,70 +112,7 @@ def play_audio(path):
 	except:
 		print "error playing audio file"
 	pygame.mixer.quit()
-
-def handle_play_audio(dict):
-	print 'handling play audio'
-	url = dict['url'];
-	print 'Play audio: "' + url + '"'
-	path = download_file(url)
-	play_audio(path)
-	##print 'TODO: Unable to play sounds right now'
-	##os.system("/usr/bin/omxplayer -o local --no-osd " + path + " >> /dev/null")
-	##subprocess.call(["/usr/bin/omxplayer", "-o", "local", path])
 	
-def handle_speak_text(dict):
-	print 'handling speak text'
-	msg = dict['text'];
-	print 'Speak "' + msg + '"'
-	msg = msg.replace("\"", "")
-	os.system("/usr/bin/espeak -a 200 -s 150 -w temp/speakfile.wav \"" + msg + "\"")
-	play_audio("temp/speakfile.wav")
-	#engine = pyttsx.init()
-	# slow down the speech rate (speed)
-	#rate = engine.getProperty('rate')
-	#engine.setProperty('rate', rate-50)
-	#engine.setProperty('volume', 1.0)
-	#engine.say(msg)
-	#engine.runAndWait()
-
-def download_file(url):
-	# ensure temp directory
-	tempFolder = "temp"
-	if not os.path.exists(tempFolder):
-		os.makedirs(tempFolder)
-	# create local file path 
-	o = urlparse(url)
-	path = tempFolder + "/a" + o.path.replace("/", "_")
-	# check if file exists
-	if os.path.isfile(path):
-		print "File already exists"
-	else:
-		# download file
-		print "Downloading file to: " + path
-		testfile = urllib.URLopener()
-		testfile.retrieve(url, path)
-	
-	return path
-
-def handle_take_photo(dict):
-	speak_dict = {'text':'HR Warning!!! I am taking a picture of you ...1 2 3...Go'}
-	handle_speak_text(speak_dict)
-	ts = time.time()
-	st = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d-%H-%M-%S')
-	filename = "CatPIC-" + st + ".jpg"
-	os.system("/usr/bin/fswebcam -r 1600x900 --no-banner temp/" + filename)
-	uploadToBlob(filename)
-	os.remove("temp/" + filename)
-	speak_dict = {'text':'Meow, Nice Pic...'}
-	handle_speak_text(speak_dict)
-
-def uploadToBlob(filename):
-	#uploads to azure blob storage
-	blob_service = BlobService(account_name=storage_account_name, account_key=storage_account_key)
-	blob_service.create_container('pubsubcat-pics')
-	blob_service.put_block_blob_from_path("pubsubcat-pics", hostname + "/" + filename, 'temp/' + filename)
-
-
 def init():
 	# Called once to init program
 	print "Calling init"
