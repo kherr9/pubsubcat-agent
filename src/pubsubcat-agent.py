@@ -57,12 +57,12 @@ def init_service_bus():
 
 def publish_log(message):
 	sbs = create_service_bus_service()
-	var body = {
+	body = {
 		"hostname": hostname,
 		"level": "debug",
 		"message": message
 	}
-	var json = json.dumps(body)
+	json = json.dumps(body)
 	msg = Message(json.encode('utf-8'), custom_properties={"messagetype":"MLevel.PubSubCat.Messages.Agent.AgentLog"})
 	sbs.send_topic_message("t.mlevel.pubsubcat.messages.agent.agentlog", msg)
 	
