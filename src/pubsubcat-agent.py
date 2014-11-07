@@ -34,21 +34,27 @@ print "Connecting as " + hostname
 print "Connecting to " + service_namespace
 print "with key " + shared_access_key_name
 
+	
 def create_service_bus_service():
-	x = ServiceBusService(service_namespace,
-						shared_access_key_name=shared_access_key_name,
-						shared_access_key_value=shared_access_key_value)
-						
+	ServiceBusService(service_namespace,
+					shared_access_key_name=shared_access_key_name,
+					shared_access_key_value=shared_access_key_value)
+					
+def init_service_bus():
+	sbs = create_service_bus_service()
+	
 	# create subscription for THIS machine queue
 	subscription = Subscription()
 	subscription.default_message_time_to_live = 'PT1M'	#1m
 
 	# create subscriptions to agent topic
 	print "Creating subscription " + subscription_name + " for topic " + topic_path + "..."
-	x.create_subscription(topic_path, subscription_name, subscription)
+	sbs.create_subscription(topic_path, subscription_name, subscription)
 	
-	return x
-
+	print "create publishing topics"
+	sbs.create_topic("t.mlevel.pubsubcat.messages.agent.agentevent")
+	sbs.create_topic("t.mlevel.pubsubcat.messages.agent.agentlog")
+	
 def handle_play_audio(dict):
 	print 'handling play audio'
 	url = dict['url'];
@@ -121,6 +127,8 @@ def init():
 	if not os.path.exists("temp"):
 		print "Creating temp directory"
 		os.makedirs("temp")
+		
+	init_service_bus()
 		
 	print "Completed init"
 
