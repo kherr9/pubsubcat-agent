@@ -79,7 +79,7 @@ def handle_speak_text(dict):
 	print 'Speak "' + msg + '"'
 	msg = msg.replace("\"", "")
 	os.system("/usr/bin/espeak -a 200 -s 150 -w temp/speakfile.wav \"" + msg + "\"")
-	play_audio("temp/speakfile.wav"
+	play_audio("temp/speakfile.wav")
 	#engine = pyttsx.init()
 	# slow down the speech rate (speed)
 	#rate = engine.getProperty('rate')
