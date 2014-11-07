@@ -54,7 +54,19 @@ def init_service_bus():
 	print "create publishing topics"
 	sbs.create_topic("t.mlevel.pubsubcat.messages.agent.agentevent")
 	sbs.create_topic("t.mlevel.pubsubcat.messages.agent.agentlog")
+
+def publish_log(message):
+	sbs = create_service_bus_service()
+	var body = {
+		"hostname": hostname,
+		"level": "debug",
+		"message": message
+	}
+	var json = json.dumps(body)
+	msg = Message(json.encode('utf-8'), custom_properties={"messagetype":"MLevel.PubSubCat.Messages.Agent.AgentLog"})
+	sbs.send_topic_message("t.mlevel.pubsubcat.messages.agent.agentlog", msg)
 	
+
 def handle_play_audio(dict):
 	print 'handling play audio'
 	url = dict['url'];
@@ -163,6 +175,8 @@ def process_messages():
 					callbacks[message_type](dict)
 				else:
 					print 'Unknown message type: ' + message_type
+					
+				publish_log("Completed a message")
 			else:
 				print 'No message was delivered'
 		except WindowsAzureMissingResourceError:
