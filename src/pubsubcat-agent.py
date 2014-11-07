@@ -36,7 +36,7 @@ print "with key " + shared_access_key_name
 
 	
 def create_service_bus_service():
-	ServiceBusService(service_namespace,
+	return ServiceBusService(service_namespace,
 					shared_access_key_name=shared_access_key_name,
 					shared_access_key_value=shared_access_key_value)
 					
