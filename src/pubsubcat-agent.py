@@ -10,7 +10,7 @@ import time, datetime
 import socket
 from urlparse import urlparse
 
-print 'Starting mLevel PubSubCat version X.X.X.X'
+print 'Starting mLevel PubSubCat'
 
 
 # get configurations
@@ -200,6 +200,7 @@ def process_messages():
 		except StopAgentException as e:
 			print 'Caught exception StopAgentException'
 			print e
+			publish_log(str(e))
 			signaled_to_quit = True
 		except:
 			exc_type, exc_value, exc_traceback = sys.exc_info()
