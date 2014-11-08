@@ -7,6 +7,7 @@ print "Starting PubSubCat supervisor"
 def update_src():
 	print "checking for latest code..."
 	os.system("git fetch -v")
+	
 	print "completed checking for latest code"
 
 def run_agent():
