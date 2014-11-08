@@ -90,6 +90,14 @@ def handle_take_photo(dict):
 	os.remove("temp/" + filename)
 	speak_text("Meow, Nice Pic...")
 	
+def handle_restart_agent(dict):
+	print 'handling restart agent'
+	# just raise exception to get out of control loop
+	raise StopAgentException(dict['reason'])
+	
+class StopAgentException(Exception):
+    pass
+	
 def download_file(url):
 	# create local file path 
 	o = urlparse(url)
@@ -150,6 +158,7 @@ callbacks = {
 	'MLevel.PubSubCat.Messages.Agent.PlayAudio': handle_play_audio,
 	'MLevel.PubSubCat.Messages.Agent.SpeakText': handle_speak_text,
 	'MLevel.PubSubCat.Messages.Agent.TakePhoto': handle_take_photo,
+	'MLevel.PubSubCat.Messages.Agent.RestartAgent': handle_restart_agent
 }
 
 def process_messages():
@@ -187,6 +196,10 @@ def process_messages():
 		except KeyboardInterrupt:
 			print 'Called to quit'
 			publish_log("Called to quit")
+			signaled_to_quit = True
+		except StopAgentException as e:
+			print 'Caught exception StopAgentException'
+			print e
 			signaled_to_quit = True
 		except:
 			exc_type, exc_value, exc_traceback = sys.exc_info()
