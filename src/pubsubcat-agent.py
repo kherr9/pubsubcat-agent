@@ -210,6 +210,7 @@ def process_messages():
 			publish_log("An unhandle error!!!")
 
 process_messages()
+
 	
 #t = threading.Thread(target=process_messages)
 #t.daemon = True
