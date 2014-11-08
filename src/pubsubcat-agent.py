@@ -12,7 +12,6 @@ from urlparse import urlparse
 
 print 'Starting mLevel PubSubCat'
 
-
 # get configurations
 config = json.load(open('config.json'))
 
