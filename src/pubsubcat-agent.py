@@ -11,7 +11,7 @@ import time, datetime
 import socket
 from urlparse import urlparse
 
-print 'Starting mLevel PubSubCat'
+print 'Starting mLevel PubSubCat v3'
 
 # get configurations
 config = json.load(open('config.json'))
