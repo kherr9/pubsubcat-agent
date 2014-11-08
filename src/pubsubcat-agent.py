@@ -10,7 +10,7 @@ import time, datetime
 import socket
 from urlparse import urlparse
 
-print 'Starting mLevel PubSubCat'
+print 'Starting mLevel PubSubCat version X.X.X.X'
 
 
 # get configurations
