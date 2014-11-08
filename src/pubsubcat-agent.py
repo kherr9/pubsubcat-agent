@@ -1,3 +1,4 @@
+#!/usr/bin/python
 from azure.servicebus import ServiceBusService, Message, Topic, Subscription, Queue
 from azure import WindowsAzureMissingResourceError
 from azure.storage import BlobService
@@ -163,7 +164,7 @@ callbacks = {
 def process_messages():
 	# now start listening to subscription
 	print 'Now listening to incoming messages...'
-	signaled_to_quit = False;
+	signaled_to_quit = False
 	sbs = None
 	while not signaled_to_quit:
 		try:
