@@ -11,7 +11,7 @@ import time, datetime
 import socket
 from urlparse import urlparse
 
-print 'Starting mLevel PubSubCat v3'
+print 'Starting mLevel PubSubCat - FOR REAL'
 
 print '!!! THIS IS A TEST MESSAGE FOR JOSE !!!'
 
