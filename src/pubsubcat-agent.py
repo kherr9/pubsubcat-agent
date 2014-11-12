@@ -13,6 +13,8 @@ from urlparse import urlparse
 
 print 'Starting mLevel PubSubCat v3'
 
+print '!!! THIS IS A TEST MESSAGE FOR JOSE !!!'
+
 # get configurations
 config = json.load(open('config.json'))
 
