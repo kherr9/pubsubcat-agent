@@ -122,9 +122,10 @@ def upload_to_blob(filename):
 def speak_text(msg):
 	print 'Speak "' + msg + '"'
 	# escape the string by removing double quotes
-	msg = msg.replace("\"", "")	
-	os.system("/usr/bin/espeak -a 200 -s 150 -w temp/speakfile.wav \"" + msg + "\"")
-	play_audio("temp/speakfile.wav")
+	msg = msg.replace("\"", "")
+	os.system("/bin/bash Speech.sh \"" + msg + "\"")
+	#os.system("/usr/bin/espeak -a 200 -s 150 -w temp/speakfile.wav \"" + msg + "\"")
+	#play_audio("temp/speakfile.wav")
 	
 def play_audio(path):
 	print "playing audio file " + path
