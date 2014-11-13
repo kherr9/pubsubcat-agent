@@ -211,12 +211,3 @@ def process_messages():
 			publish_log("An unhandle error!!!")
 
 process_messages()
-
-	
-#t = threading.Thread(target=process_messages)
-#t.daemon = True
-#threading.Threadt.start()
-
-#char = raw_input("Press <Enter> to exit program\n")	
-
-#print 'Ending program'
