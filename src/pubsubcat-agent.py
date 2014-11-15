@@ -150,8 +150,9 @@ def get_ip_address(ifname):
         struct.pack('256s', ifname[:15])
     )[20:24])
 
-print get_ip_address('eth0')	
-	
+print get_ip_address("eth0")	
+publish_log("My ip addres is: " + get_ip_address("eth0"))
+
 def init():
 	# Called once to init program
 	print "Calling init"
