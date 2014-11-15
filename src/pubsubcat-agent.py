@@ -39,6 +39,7 @@ def create_logger(name):
 		method='POST',
 	)
 	http_handler.setFormatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+	http_handler.setLevel(logging.DEBUG)
 	logger.addHandler(http_handler)
 	return logger;
 	
