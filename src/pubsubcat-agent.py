@@ -166,9 +166,9 @@ def init():
 		
 	init_service_bus()
 		
-	logger.info("Completed init")
-	logger.info("getting IP Addres")
 	logger.info("My ip addres is: " + get_ip_address("eth0"))
+	
+	logger.info("Completed init")
 
 init()		
 		
