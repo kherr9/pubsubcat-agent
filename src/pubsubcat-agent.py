@@ -36,9 +36,9 @@ subscription_name = subscription_name_prefix + hostname.lower() # add machine na
 	
 # configure logger
 logger = logging.getLogger(hostname)
-logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',level=logging.DEBUG)
-logging.warning('Watch out!') # will print a message to the console
-logging.info('I told you so') # will not print anything	
+logger.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',level=logging.DEBUG)
+logger.warning('Watch out!') # will print a message to the console
+logger.info('I told you so') # will not print anything	
 	
 print "Connecting as " + hostname
 print "Connecting to " + service_namespace
