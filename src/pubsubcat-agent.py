@@ -32,7 +32,7 @@ hostname = socket.gethostname()
 if "hostname" in config:
 	hostname = config["hostname"]
 
-logger = create_logger()
+logger = create_logger(hostname)
 logger.debug("Created logger!!!")
 	
 subscription_name = subscription_name_prefix + hostname.lower() # add machine name
