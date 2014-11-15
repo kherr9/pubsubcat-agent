@@ -31,7 +31,12 @@ storage_account_key = config["storage_account_key"]
 hostname = socket.gethostname()
 if "hostname" in config:
 	hostname = config["hostname"]
-
+	
+def create_logger(name):
+	logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',level=logging.DEBUG)
+	logger = logging.getLogger(name)
+	return logger;
+	
 logger = create_logger(hostname)
 logger.debug("Created logger!!!")
 	
@@ -63,11 +68,6 @@ def init_service_bus():
 	print "create publishing topics"
 	sbs.create_topic("t.mlevel.pubsubcat.messages.agent.agentevent")
 	sbs.create_topic("t.mlevel.pubsubcat.messages.agent.agentlog")
-
-def create_logger(name):
-	logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',level=logging.DEBUG)
-	logger = logging.getLogger(name)
-	return logger;
 
 def publish_log(message):
 	sbs = create_service_bus_service()
