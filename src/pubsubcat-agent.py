@@ -40,6 +40,7 @@ def create_logger(name):
 		'/13qhbwe1',
 		method='POST',
 	)
+	http_handler.setFormatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 	logger.addHandler(http_handler)
 	return logger;
 	
