@@ -219,7 +219,7 @@ def process_messages():
 			publish_log("Called to quit")
 			signaled_to_quit = True
 		except StopAgentException as e:
-			logger.info( 'Caught exception StopAgentException')
+			logger.info('Caught exception StopAgentException')
 			print e
 			publish_log(str(e))
 			signaled_to_quit = True
@@ -228,7 +228,7 @@ def process_messages():
 			print "*** print_exception:"
 			traceback.print_exception(exc_type, exc_value, exc_traceback,
 									  limit=2, file=sys.stdout)
-		    logger.exception("Got exception in process loop")
+			logger.exception("Got exception in process loop")
 			publish_log("An unhandle error!!!")
 
 process_messages()
