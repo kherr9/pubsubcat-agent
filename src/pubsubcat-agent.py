@@ -155,9 +155,6 @@ def get_ip_address(ifname):
         struct.pack('256s', ifname[:15])
     )[20:24])
 
-logger.info("getting IP Addres")
-logger.info("My ip addres is: " + get_ip_address("eth0"))
-
 def init():
 	# Called once to init program
 	logger.info("Calling init")
@@ -173,6 +170,9 @@ def init():
 
 init()		
 		
+logger.info("getting IP Addres")
+logger.info("My ip addres is: " + get_ip_address("eth0"))
+
 callbacks = {
 	'MLevel.PubSubCat.Messages.Agent.PlayAudio': handle_play_audio,
 	'MLevel.PubSubCat.Messages.Agent.SpeakText': handle_speak_text,
