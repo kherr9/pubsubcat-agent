@@ -31,14 +31,13 @@ storage_account_key = config["storage_account_key"]
 hostname = socket.gethostname()
 if "hostname" in config:
 	hostname = config["hostname"]
-						
+
+logger = create_logger()
+logger.debug("Created logger!!!")
+	
 subscription_name = subscription_name_prefix + hostname.lower() # add machine name
 	
 # configure logger
-logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',level=logging.DEBUG)
-logger = logging.getLogger(hostname)
-logger.warning('Watch out!') # will print a message to the console
-logger.info('I told you so') # will not print anything	
 	
 print "Connecting as " + hostname
 print "Connecting to " + service_namespace
@@ -64,6 +63,11 @@ def init_service_bus():
 	print "create publishing topics"
 	sbs.create_topic("t.mlevel.pubsubcat.messages.agent.agentevent")
 	sbs.create_topic("t.mlevel.pubsubcat.messages.agent.agentlog")
+
+def create_logger(name):
+	logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',level=logging.DEBUG)
+	logger = logging.getLogger(name)
+	return logger;
 
 def publish_log(message):
 	sbs = create_service_bus_service()
