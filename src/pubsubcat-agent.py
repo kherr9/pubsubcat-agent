@@ -139,6 +139,19 @@ def play_audio(path):
 	except:
 		print "error playing audio file"
 	pygame.mixer.quit()
+
+def get_ip_address():
+	import socket
+	import fcntl
+	import struct
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    return socket.inet_ntoa(fcntl.ioctl(
+        s.fileno(),
+        0x8915,  # SIOCGIFADDR
+        struct.pack('256s', ifname[:15])
+    )[20:24])
+
+print 'My ip address is: ' + get_ip_address()	
 	
 def init():
 	# Called once to init program
