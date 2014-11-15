@@ -16,10 +16,6 @@ import logging
 
 print 'Starting mLevel PubSubCat - FOR REAL'
 
-# test logging
-logging.basicConfig(format='%(asctime)s %(message)s',level=logging.DEBUG)
-logging.warning('Watch out!') # will print a message to the console
-logging.info('I told you so') # will not print anything
 
 # get configurations
 config = json.load(open('config.json'))
@@ -37,6 +33,12 @@ if "hostname" in config:
 	hostname = config["hostname"]
 						
 subscription_name = subscription_name_prefix + hostname.lower() # add machine name
+	
+
+# test logging
+logging.basicConfig(format='' + hostname + ' - %(asctime)s %(message)s',level=logging.DEBUG)
+logging.warning('Watch out!') # will print a message to the console
+logging.info('I told you so') # will not print anything	
 	
 print "Connecting as " + hostname
 print "Connecting to " + service_namespace
