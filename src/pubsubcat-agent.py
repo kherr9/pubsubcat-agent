@@ -32,6 +32,12 @@ if "hostname" in config:
 def create_logger(name):
 	logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',level=logging.DEBUG)
 	logger = logging.getLogger(name)
+	http_handler = logging.handlers.HTTPHandler(
+		'pubsubcat.mlevel.net',
+		'/agent/log',
+		method='POST',
+	)
+	logger.addHandler(http_handler)
 	return logger;
 	
 logger = create_logger(hostname)
