@@ -32,7 +32,7 @@ if "hostname" in config:
 	
 def create_logger(name):
 	logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',level=logging.DEBUG)
-	logger = logging.getLogger(name)
+	l = logging.getLogger(name)
 	http_handler = logging.handlers.HTTPHandler(
 		'pubsubcat.mlevel.net',
 		'/agent/log',
@@ -40,8 +40,8 @@ def create_logger(name):
 	)
 	http_handler.setFormatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 	http_handler.setLevel(logging.DEBUG)
-	logger.addHandler(http_handler)
-	return logger;
+	l.addHandler(http_handler)
+	return l;
 	
 logger = create_logger(hostname)
 logger.debug("Created logger!!!")
