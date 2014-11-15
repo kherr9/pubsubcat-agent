@@ -72,17 +72,6 @@ def init_service_bus():
 	logger.info("create publishing topics")
 	sbs.create_topic("t.mlevel.pubsubcat.messages.agent.agentevent")
 	sbs.create_topic("t.mlevel.pubsubcat.messages.agent.agentlog")
-
-def publish_log(message):
-	sbs = create_service_bus_service()
-	body = {
-		"hostname": hostname,
-		"level": "debug",
-		"message": message
-	}
-	js = json.dumps(body)
-	msg = Message(js.encode('utf-8'), custom_properties={"messagetype":"MLevel.PubSubCat.Messages.Agent.AgentLog"})
-	sbs.send_topic_message("t.mlevel.pubsubcat.messages.agent.agentlog", msg)
 	
 def handle_play_audio(dict):
 	logger.info('handling play audio')
@@ -166,7 +155,6 @@ def get_ip_address(ifname):
     )[20:24])
 
 logger.info("My ip addres is: " + get_ip_address("eth0"))
-publish_log("My ip addres is: " + get_ip_address("eth0"))
 
 def init():
 	# Called once to init program
@@ -206,32 +194,26 @@ def process_messages():
 			if msg.body is not None:
 				print (msg.body)
 				message_type = msg.custom_properties['messagetype']
-				publish_log("Got message type: " + message_type + ", Body: " + msg.body)
-				logger.info('got message type: ' + message_type)
+				logger.info('got message type: ' + message_type + ", Body: " + msg.body)
 				dict = json.loads(msg.body)
 				logger.info(dict)
 				if message_type in callbacks:
 					callbacks[message_type](dict)
-					publish_log("Completed task: " + message_type)
+					logger.info("Completed task: " + message_type)
 				else:
 					logger.info( 'Unknown message type: ' + message_type)
-					publish_log("Unknown task: " + message_type)
 			else:
 				print 'No message was delivered'
 		except WindowsAzureMissingResourceError:
 			logger.exception("Got exception from azure service")
-			publish_log('The subscription we are listening to no longer exists')
 			sbs = None
 		except KeyboardInterrupt:
-			logger.info( 'Called to quit')
-			publish_log("Called to quit")
+			logger.info("Called to quit")
 			signaled_to_quit = True
 		except StopAgentException as e:
-			logger.info('Caught exception StopAgentException')
-			publish_log(str(e))
+			logger.info("Caught exception StopAgentException")
 			signaled_to_quit = True
 		except:
 			logger.exception("Got exception in process loop")
-			publish_log("An unhandle error!!!")
 
 process_messages()
