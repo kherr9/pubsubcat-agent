@@ -14,9 +14,6 @@ import fcntl
 import struct
 import logging
 
-print 'Starting mLevel PubSubCat - FOR REAL'
-
-
 # get configurations
 config = json.load(open('config.json'))
 
@@ -43,12 +40,11 @@ logger.debug("Created logger!!!")
 subscription_name = subscription_name_prefix + hostname.lower() # add machine name
 	
 # configure logger
-	
-print "Connecting as " + hostname
-print "Connecting to " + service_namespace
-print "with key " + shared_access_key_name
+logger.info("Starting mLevel PubSubCat - FOR REAL")
+logger.info("Connecting as " + hostname)
+logger.info("Connecting to " + service_namespace)	
+logger.info("with key " + shared_access_key_name)	
 
-	
 def create_service_bus_service():
 	return ServiceBusService(service_namespace,
 					shared_access_key_name=shared_access_key_name,
@@ -62,10 +58,10 @@ def init_service_bus():
 	subscription.default_message_time_to_live = 'PT1M'	#1m
 
 	# create subscriptions to agent topic
-	print "Creating subscription " + subscription_name + " for topic " + topic_path + "..."
+	logger.info("Creating subscription " + subscription_name + " for topic " + topic_path + "...")
 	sbs.create_subscription(topic_path, subscription_name, subscription)
 	
-	print "create publishing topics"
+	logger.info("create publishing topics")
 	sbs.create_topic("t.mlevel.pubsubcat.messages.agent.agentevent")
 	sbs.create_topic("t.mlevel.pubsubcat.messages.agent.agentlog")
 
@@ -81,19 +77,19 @@ def publish_log(message):
 	sbs.send_topic_message("t.mlevel.pubsubcat.messages.agent.agentlog", msg)
 	
 def handle_play_audio(dict):
-	print 'handling play audio'
+	logger.info('handling play audio')
 	url = dict['url'];
-	print 'Play audio: "' + url + '"'
+	logger.info('Play audio: "' + url + '"')
 	path = download_file(url)
 	play_audio(path)
 	
 def handle_speak_text(dict):
-	print 'handling speak text'
+	logger.info('handling speak text')
 	msg = dict['text'];
 	speak_text(msg);
 
 def handle_take_photo(dict):
-	print 'handling take photo'
+	logger.info('handling take photo')
 	speak_text("HR Warning!!! I am taking a picture of you ...1 2 3...Go")
 	ts = time.time()
 	st = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d-%H-%M-%S')
@@ -104,7 +100,7 @@ def handle_take_photo(dict):
 	speak_text("Meow, Nice Pic...")
 	
 def handle_restart_agent(dict):
-	print 'handling restart agent'
+	logger.info('handling restart agent')
 	# just raise exception to get out of control loop
 	raise StopAgentException(dict['reason'])
 	
@@ -117,10 +113,10 @@ def download_file(url):
 	path = "temp/a" + o.path.replace("/", "_")
 	# check if file exists
 	if os.path.isfile(path):
-		print "File already exists"
+		logger.info("File already exists")
 	else:
 		# download file
-		print "Downloading file to: " + path
+		logger.info("Downloading file to: " + path)
 		testfile = urllib.URLopener()
 		testfile.retrieve(url, path)
 	
@@ -133,7 +129,7 @@ def upload_to_blob(filename):
 	blob_service.put_block_blob_from_path("pubsubcat-pics", hostname + "/" + filename, 'temp/' + filename)
 
 def speak_text(msg):
-	print 'Speak "' + msg + '"'
+	logger.info('Speak "' + msg + '"')
 	# escape the string by removing double quotes
 	msg = msg.replace("\"", "")
 	os.system("/bin/bash Speech.sh \"" + msg + "\"")
@@ -141,16 +137,16 @@ def speak_text(msg):
 	#play_audio("temp/speakfile.wav")
 	
 def play_audio(path):
-	print "playing audio file " + path
+	logger.info("playing audio file " + path)
 	pygame.mixer.init()
 	try:
 		pygame.mixer.music.load(path)
 		pygame.mixer.music.play()
 		while pygame.mixer.music.get_busy() == True:
 			continue
-		"finished playing audio file"
+		logger.info("finished playing audio file")
 	except:
-		print "error playing audio file"
+		logger.error("error playing audio file")
 	pygame.mixer.quit()
 
 def get_ip_address(ifname):
@@ -161,21 +157,21 @@ def get_ip_address(ifname):
         struct.pack('256s', ifname[:15])
     )[20:24])
 
-print get_ip_address("eth0")	
+logger.info("My ip addres is: " + get_ip_address("eth0"))
 publish_log("My ip addres is: " + get_ip_address("eth0"))
 
 def init():
 	# Called once to init program
-	print "Calling init"
+	logger.info("Calling init")
 	
-	print "Ensuring temp directory"
+	logger.info("Ensuring temp directory")
 	if not os.path.exists("temp"):
-		print "Creating temp directory"
+		logger.info("Creating temp directory")
 		os.makedirs("temp")
 		
 	init_service_bus()
 		
-	print "Completed init"
+	logger.info("Completed init")
 
 init()		
 		
@@ -188,42 +184,42 @@ callbacks = {
 
 def process_messages():
 	# now start listening to subscription
-	print 'Now listening to incoming messages...'
+	logger.info('Now listening to incoming messages...')
 	signaled_to_quit = False
 	sbs = None
 	while not signaled_to_quit:
 		try:
 			if sbs is None:
-				print "Service bus service has does not exist, creating..."
+				logger.info("Service bus service has does not exist, creating...")
 				sbs = create_service_bus_service()
 		
-			print 'Waiting for next message...'
+			logger.info('Waiting for next message...')
 			msg = sbs.receive_subscription_message(topic_path, subscription_name, peek_lock=False)
 			if msg.body is not None:
 				print (msg.body)
 				message_type = msg.custom_properties['messagetype']
 				publish_log("Got message type: " + message_type + ", Body: " + msg.body)
-				print 'got message type: ' + message_type
+				logger.info('got message type: ' + message_type)
 				dict = json.loads(msg.body)
-				print (dict)
+				logger.info(dict)
 				if message_type in callbacks:
 					callbacks[message_type](dict)
 					publish_log("Completed task: " + message_type)
 				else:
-					print 'Unknown message type: ' + message_type
+					logger.info( 'Unknown message type: ' + message_type)
 					publish_log("Unknown task: " + message_type)
 			else:
 				print 'No message was delivered'
 		except WindowsAzureMissingResourceError:
-			print 'The subscription we are listening to no longer exists'
+			logger.error( 'The subscription we are listening to no longer exists')
 			publish_log('The subscription we are listening to no longer exists')
 			sbs = None
 		except KeyboardInterrupt:
-			print 'Called to quit'
+			logger.info( 'Called to quit')
 			publish_log("Called to quit")
 			signaled_to_quit = True
 		except StopAgentException as e:
-			print 'Caught exception StopAgentException'
+			logger.info( 'Caught exception StopAgentException')
 			print e
 			publish_log(str(e))
 			signaled_to_quit = True
