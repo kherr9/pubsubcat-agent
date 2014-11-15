@@ -141,7 +141,7 @@ def play_audio(path):
 	pygame.mixer.quit()
 
 def get_ip_address():
-    reutrn socket.gethostbyname(socket.gethostname())
+    return socket.gethostbyname(socket.gethostname())
 
 print 'My ip address is: ' + get_ip_address()	
 	
