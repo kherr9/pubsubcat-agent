@@ -12,8 +12,13 @@ import socket
 from urlparse import urlparse
 import fcntl
 import struct
+import logging
 
 print 'Starting mLevel PubSubCat - FOR REAL'
+
+# test logging
+logging.warning('Watch out!') # will print a message to the console
+logging.info('I told you so') # will not print anything
 
 # get configurations
 config = json.load(open('config.json'))
@@ -68,7 +73,6 @@ def publish_log(message):
 	msg = Message(js.encode('utf-8'), custom_properties={"messagetype":"MLevel.PubSubCat.Messages.Agent.AgentLog"})
 	sbs.send_topic_message("t.mlevel.pubsubcat.messages.agent.agentlog", msg)
 	
-
 def handle_play_audio(dict):
 	print 'handling play audio'
 	url = dict['url'];
