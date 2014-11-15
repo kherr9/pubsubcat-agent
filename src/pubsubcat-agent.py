@@ -223,12 +223,12 @@ def process_messages():
 			print e
 			publish_log(str(e))
 			signaled_to_quit = True
-		except as e:
+		except:
 			exc_type, exc_value, exc_traceback = sys.exc_info()
 			print "*** print_exception:"
 			traceback.print_exception(exc_type, exc_value, exc_traceback,
 									  limit=2, file=sys.stdout)
-		    logger.error(e)
+		    logger.error(exc_traceback)
 			publish_log("An unhandle error!!!")
 
 process_messages()
