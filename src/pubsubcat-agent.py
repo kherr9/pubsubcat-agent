@@ -10,8 +10,6 @@ import os, sys, traceback, subprocess
 import time, datetime
 import socket
 from urlparse import urlparse
-import fcntl
-import struct
 	
 print 'Starting mLevel PubSubCat - FOR REAL'
 
@@ -143,12 +141,7 @@ def play_audio(path):
 	pygame.mixer.quit()
 
 def get_ip_address():
-    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    return socket.inet_ntoa(fcntl.ioctl(
-		s.fileno(),
-		0x8915,  # SIOCGIFADDR
-		struct.pack('256s', ifname[:15])
-		)[20:24])
+    reutrn socket.gethostbyname(socket.gethostname())
 
 print 'My ip address is: ' + get_ip_address()	
 	
