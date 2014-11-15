@@ -17,6 +17,7 @@ import logging
 print 'Starting mLevel PubSubCat - FOR REAL'
 
 # test logging
+logging.basicConfig(format='%(asctime)s %(message)s')
 logging.warning('Watch out!') # will print a message to the console
 logging.info('I told you so') # will not print anything
 
