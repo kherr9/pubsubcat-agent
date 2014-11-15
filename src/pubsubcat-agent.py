@@ -211,7 +211,7 @@ def process_messages():
 			else:
 				print 'No message was delivered'
 		except WindowsAzureMissingResourceError:
-			logger.error( 'The subscription we are listening to no longer exists')
+			logger.exception("Got exception from azure service")
 			publish_log('The subscription we are listening to no longer exists')
 			sbs = None
 		except KeyboardInterrupt:
@@ -228,7 +228,7 @@ def process_messages():
 			print "*** print_exception:"
 			traceback.print_exception(exc_type, exc_value, exc_traceback,
 									  limit=2, file=sys.stdout)
-		    logger.error(exc_traceback)
+		    logger.exception("Got exception in process loop")
 			publish_log("An unhandle error!!!")
 
 process_messages()
