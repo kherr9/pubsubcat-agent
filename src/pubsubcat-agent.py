@@ -35,8 +35,8 @@ if "hostname" in config:
 subscription_name = subscription_name_prefix + hostname.lower() # add machine name
 	
 # configure logger
+logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',level=logging.DEBUG)
 logger = logging.getLogger(hostname)
-logger.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',level=logging.DEBUG)
 logger.warning('Watch out!') # will print a message to the console
 logger.info('I told you so') # will not print anything	
 	
