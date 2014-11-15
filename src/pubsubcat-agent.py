@@ -146,7 +146,7 @@ def play_audio(path):
 			continue
 		logger.info("finished playing audio file")
 	except:
-		logger.error("error playing audio file")
+		logger.exception("Exception while playing file: " + path)
 	pygame.mixer.quit()
 
 def get_ip_address(ifname):
