@@ -103,7 +103,7 @@ def handle_take_photo(dict):
 def handle_read_temp_humidity(dict):
 	logger.info('handling read temp humidity.')
 	ser = serial.Serial('/dev/ttyACM0', 9600)
-	ser.write("1\n")
+	ser.write("1")
 	response = ser.readline()
 	ser.close()
 	logger.info(response)
