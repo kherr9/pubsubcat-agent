@@ -101,11 +101,20 @@ def handle_take_photo(dict):
 	speak_text("Meow, Nice Pic...")
 
 def handle_read_temp_humidity(dict):
-	logger.info('handling read temp humidity - 111')
+	logger.info('handling read temp humidity')
 	ser = serial.Serial('/dev/ttyACM0', 9600)
 	ser.write("1\n")
-	logger.info(ser.readline())
+	var response = ser.readline()
 	ser.close()
+	logger.info(response)
+	var readings = respons.split(',')
+	if len(readings) >= 4:
+		h = float(readings[0])
+		c = float(readings[1])
+		f = float(readings[2])
+		hi = float(readings[3])
+	else:
+		logger.info("Failed to reading temp/humidity sensor")
 	logger.info('completed reading sensor')
 	
 def handle_restart_agent(dict):
