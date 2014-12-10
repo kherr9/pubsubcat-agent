@@ -103,6 +103,8 @@ def handle_take_photo(dict):
 def handle_read_temp_humidity(dict):
 	logger.info('handling read temp humidity')
 	ser = serial.Serial('/dev/tty.usbserial', 9600)
+	ser.write("1\n")
+	logger.info(ser.readline())
 	ser.close()
 	
 def handle_restart_agent(dict):
