@@ -14,6 +14,7 @@ import fcntl
 import struct
 import logging
 import logging.handlers
+import serial
 
 # get configurations
 config = json.load(open('config.json'))
