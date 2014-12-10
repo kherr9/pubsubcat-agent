@@ -122,6 +122,7 @@ def handle_read_temp_humidity(dict):
 			'TemperatureFahrenheit':f,
 			'HeatIndex':hi
 		}
+		
 		bodyJson = json.dumps(body)
 		logger.info(bodyJson)
 	else:
