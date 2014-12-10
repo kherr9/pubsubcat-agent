@@ -106,6 +106,7 @@ def handle_read_temp_humidity(dict):
 	ser.write("1\n")
 	logger.info(ser.readline())
 	ser.close()
+	logger.info('completed reading sensor')
 	
 def handle_restart_agent(dict):
 	logger.info('handling restart agent')
