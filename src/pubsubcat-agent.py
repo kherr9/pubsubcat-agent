@@ -15,6 +15,7 @@ import struct
 import logging
 import logging.handlers
 import serial
+import urllib2
 
 # get configurations
 config = json.load(open('config.json'))
@@ -126,6 +127,13 @@ def handle_read_temp_humidity(dict):
 		
 		bodyJson = json.dumps(body)
 		logger.info(bodyJson)
+		
+		req = urllib2.Request('http://abc.com/api/posts/create')
+		req.add_header('Content-Type', 'application/json')
+		
+		response = urllib2.urlopen(req, logger)
+		logger.info(str(response))
+		
 	else:
 		logger.info("Failed to reading temp/humidity sensor")
 	logger.info('completed reading sensor')
