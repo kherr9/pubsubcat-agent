@@ -86,7 +86,9 @@ def handle_speak_text(dict):
 	logger.info('handling speak text')
 	msg = dict['text'];
 	speak_text(msg);
-
+	# temp solution to get reading here
+	handle_read_temp_humidity(dict)
+	
 def handle_take_photo(dict):
 	logger.info('handling take photo')
 	speak_text("HR Warning!!! I am taking a picture of you ...1 2 3...Go")
@@ -97,6 +99,10 @@ def handle_take_photo(dict):
 	upload_to_blob(filename)
 	os.remove("temp/" + filename)
 	speak_text("Meow, Nice Pic...")
+
+def handle_read_temp_humidity(dict):
+	logger.info('handling read temp humidity')
+	
 	
 def handle_restart_agent(dict):
 	logger.info('handling restart agent')
@@ -178,6 +184,7 @@ callbacks = {
 	'MLevel.PubSubCat.Messages.Agent.PlayAudio': handle_play_audio,
 	'MLevel.PubSubCat.Messages.Agent.SpeakText': handle_speak_text,
 	'MLevel.PubSubCat.Messages.Agent.TakePhoto': handle_take_photo,
+	'MLevel.PubSubCat.Messages.Agent.TakeTempAndHumidityReading': handle_read_temp_humidity,
 	'MLevel.PubSubCat.Messages.Agent.RestartAgent': handle_restart_agent
 }
 
