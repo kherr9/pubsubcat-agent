@@ -107,7 +107,7 @@ def handle_read_temp_humidity(dict):
 	var response = ser.readline()
 	ser.close()
 	logger.info(response)
-	var readings = respons.split(',')
+	var readings = response.split(',')
 	if len(readings) >= 4:
 		h = float(readings[0])
 		c = float(readings[1])
