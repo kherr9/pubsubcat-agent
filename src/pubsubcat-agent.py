@@ -104,10 +104,10 @@ def handle_read_temp_humidity(dict):
 	logger.info('handling read temp humidity')
 	ser = serial.Serial('/dev/ttyACM0', 9600)
 	ser.write("1\n")
-	var response = ser.readline()
+	response = ser.readline()
 	ser.close()
 	logger.info(response)
-	var readings = response.split(',')
+	readings = response.split(',')
 	if len(readings) >= 4:
 		h = float(readings[0])
 		c = float(readings[1])
