@@ -15,6 +15,7 @@ import struct
 import logging
 import logging.handlers
 import serial
+import datetime
 
 # get configurations
 config = json.load(open('config.json'))
@@ -113,6 +114,16 @@ def handle_read_temp_humidity(dict):
 		c = float(readings[1])
 		f = float(readings[2])
 		hi = float(readings[3])
+		body = {
+			'Hostname': hostname,
+			'Timestamp': unix_time(datetime.datetime.utcnow())
+			'Humidity':h,
+			'TemperatureCelsius':c,
+			'TemperatureFahrenheit':f,
+			'HeatIndex':hi
+		}
+		bodyJson = json.dumps(body)
+		logger.info(bodyJson)
 	else:
 		logger.info("Failed to reading temp/humidity sensor")
 	logger.info('completed reading sensor')
@@ -175,6 +186,11 @@ def get_ip_address(ifname):
         struct.pack('256s', ifname[:15])
     )[20:24])
 
+def unix_time(dt):
+    epoch = datetime.datetime.utcfromtimestamp(0)
+    delta = dt - epoch
+    return delta.total_seconds()
+	
 def init():
 	# Called once to init program
 	logger.info("Calling init")
