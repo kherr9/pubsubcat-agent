@@ -86,8 +86,6 @@ def handle_speak_text(dict):
 	logger.info('handling speak text')
 	msg = dict['text'];
 	speak_text(msg);
-	# adding hear so that we have a way to trigger it
-	handle_read_temp_humidity(dict)
 
 def handle_take_photo(dict):
 	logger.info('handling take photo')
@@ -99,22 +97,14 @@ def handle_take_photo(dict):
 	upload_to_blob(filename)
 	os.remove("temp/" + filename)
 	speak_text("Meow, Nice Pic...")
-
-def handle_read_temp_humidity(dict):
-	logger.info('handling read temp and humidity sensor')
-	ser = serial.Serial('/dev/tty.usbserial', 9600)
-	ser.write('hello\n')
-    logger.info(ser.readline())
-	ser.close()
-	logger.info('completed reading temp sensor')
 	
 def handle_restart_agent(dict):
 	logger.info('handling restart agent')
 	# just raise exception to get out of control loop
 	raise StopAgentException(dict['reason'])
-
+	
 class StopAgentException(Exception):
-	pass
+    pass
 	
 def download_file(url):
 	# create local file path 
@@ -142,6 +132,8 @@ def speak_text(msg):
 	# escape the string by removing double quotes
 	msg = msg.replace("\"", "")
 	os.system("/bin/bash Speech.sh \"" + msg + "\"")
+	#os.system("/usr/bin/espeak -a 200 -s 150 -w temp/speakfile.wav \"" + msg + "\"")
+	#play_audio("temp/speakfile.wav")
 	
 def play_audio(path):
 	logger.info("playing audio file " + path)
@@ -186,7 +178,6 @@ callbacks = {
 	'MLevel.PubSubCat.Messages.Agent.PlayAudio': handle_play_audio,
 	'MLevel.PubSubCat.Messages.Agent.SpeakText': handle_speak_text,
 	'MLevel.PubSubCat.Messages.Agent.TakePhoto': handle_take_photo,
-	'MLevel.PubSubCat.Messages.Agent.TakeTempAndHumidityReading': handle_read_temp_humidity,
 	'MLevel.PubSubCat.Messages.Agent.RestartAgent': handle_restart_agent
 }
 
