@@ -101,7 +101,7 @@ def handle_take_photo(dict):
 	speak_text("Meow, Nice Pic...")
 
 def handle_read_temp_humidity(dict):
-	logger.info('handling read temp humidity')
+	logger.info('handling read temp humidity - 111')
 	ser = serial.Serial('/dev/tty.usbserial', 9600)
 	ser.write("1\n")
 	logger.info(ser.readline())
