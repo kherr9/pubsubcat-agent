@@ -118,6 +118,7 @@ def handle_read_temp_humidity(dict):
 		body = {
 			'Hostname': hostname,
 			#'Timestamp': unix_time(datetime.datetime.utcnow()),
+			'Timestamp': str(datetime.datetime.utcnow()),
 			'Humidity':h,
 			'TemperatureCelsius':c,
 			'TemperatureFahrenheit':f,
