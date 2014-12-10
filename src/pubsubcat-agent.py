@@ -105,6 +105,7 @@ def handle_read_temp_humidity(dict):
 	logger.info('handling read temp humidity.')
 	ser = serial.Serial('/dev/ttyACM0', 9600, timeout=5)
 	ser.write("hello world")
+	ser.flush()
 	response = ser.readline()
 	ser.close()
 	logger.info(response)
