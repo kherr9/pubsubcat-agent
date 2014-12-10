@@ -15,7 +15,6 @@ import struct
 import logging
 import logging.handlers
 import serial
-import datetime
 
 # get configurations
 config = json.load(open('config.json'))
@@ -118,7 +117,7 @@ def handle_read_temp_humidity(dict):
 		body = {
 			'Hostname': hostname,
 			#'Timestamp': unix_time(datetime.datetime.utcnow()),
-			'Timestamp': str(datetime.datetime.utcnow()),
+			'Timestamp': str(unix_time(datetime.datetime.utcnow())),
 			'Humidity':h,
 			'TemperatureCelsius':c,
 			'TemperatureFahrenheit':f,
