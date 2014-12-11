@@ -105,7 +105,7 @@ def handle_read_temp_humidity(dict):
 	logger.info('handling read temp humidity.')
 	ser = serial.Serial('/dev/ttyACM0', 9600, timeout=5)
 	# connecting to arduino resets, so we should sleep here until we do better solution
-	time.sleep(2)
+	time.sleep(1)
 	ser.write("hello world")
 	ser.flush()
 	response = ser.readline()
@@ -119,7 +119,6 @@ def handle_read_temp_humidity(dict):
 		hi = float(readings[3])
 		body = {
 			'Hostname': hostname,
-			#'Timestamp': unix_time(datetime.datetime.utcnow()),
 			'Timestamp': str(unix_time(datetime.datetime.utcnow())),
 			'Humidity':h,
 			'TemperatureCelsius':c,
