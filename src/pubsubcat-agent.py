@@ -76,14 +76,14 @@ def init_service_bus():
 	sbs.create_topic("t.mlevel.pubsubcat.messages.agent.agentevent")
 	sbs.create_topic("t.mlevel.pubsubcat.messages.agent.agentlog")
 	
-cached_temperature_reader = None
 def get_temperature_reader():
-	if global cached_temperature_reader is None:
-		logger.info('creating temp reader')
-		global cached_temperature_reader = serial.Serial('/dev/ttyACM0', 9600, timeout=5)
-		# wait for arduino to initialize
-		time.sleep(1)
-	return cached_temperature_reader
+	logger.info('creating serial reader')
+	ser = serial.Serial('/dev/ttyACM0', 9600, timeout=5)
+	# wait for arduino to initialize
+	time.sleep(1)
+	return ser
+
+cached_rdr = get_temperature_reader()
 	
 def handle_play_audio(dict):
 	logger.info('handling play audio')
@@ -112,10 +112,9 @@ def handle_take_photo(dict):
 
 def handle_read_temp_humidity(dict):
 	logger.info('handling read temp humidity.')
-	ser = get_temperature_reader()
-	ser.write("hello world")
-	ser.flush()
-	response = ser.readline()
+	cached_rdr.write("hello world")
+	cached_rdr.flush()
+	response = cached_rdr.readline()
 	logger.info(response)
 	readings = response.split(',')
 	if len(readings) >= 4:
@@ -275,5 +274,5 @@ def process_messages():
 
 process_messages()
 
-if cached_temperature_reader is not None:
-	cached_temperature_reader.close()
+if cached_rdr is not None:
+	cached_rdr.close()
