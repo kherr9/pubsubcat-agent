@@ -270,6 +270,7 @@ def process_messages():
 			logger.info("Caught exception StopAgentException")
 			signaled_to_quit = True
 		except:
+			logger.info("Caught unknown exception")
 			logger.exception("Got exception in process loop")
 
 process_messages()
