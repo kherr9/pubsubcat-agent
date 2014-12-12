@@ -78,6 +78,7 @@ def init_service_bus():
 	
 cached_temperature_reader = None
 def get_temperature_reader():
+	global cached_temperature_reader 
 	if cached_temperature_reader is None:
 		logger.info('creating temp reader')
 		cached_temperature_reader = serial.Serial('/dev/ttyACM0', 9600, timeout=5)
