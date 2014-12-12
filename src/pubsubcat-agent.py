@@ -76,6 +76,15 @@ def init_service_bus():
 	sbs.create_topic("t.mlevel.pubsubcat.messages.agent.agentevent")
 	sbs.create_topic("t.mlevel.pubsubcat.messages.agent.agentlog")
 	
+cached_temperature_reader = None
+def get_temperature_reader():
+	if cached_temperature_reader is None:
+		logger.info('creating temp reader')
+		cached_temperature_reader = serial.Serial('/dev/ttyACM0', 9600, timeout=5)
+		# wait for arduino to initialize
+		time.sleep(1)
+	return cached_temperature_reader
+	
 def handle_play_audio(dict):
 	logger.info('handling play audio')
 	url = dict['url'];
@@ -103,13 +112,10 @@ def handle_take_photo(dict):
 
 def handle_read_temp_humidity(dict):
 	logger.info('handling read temp humidity.')
-	ser = serial.Serial('/dev/ttyACM0', 9600, timeout=5)
-	# connecting to arduino resets, so we should sleep here until we do better solution
-	time.sleep(1)
+	ser = get_temperature_reader()
 	ser.write("hello world")
 	ser.flush()
 	response = ser.readline()
-	ser.close()
 	logger.info(response)
 	readings = response.split(',')
 	if len(readings) >= 4:
@@ -267,3 +273,6 @@ def process_messages():
 			logger.exception("Got exception in process loop")
 
 process_messages()
+
+if cached_temperature_reader is not None:
+	cached_temperature_reader.close()
